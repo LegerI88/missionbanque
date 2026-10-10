@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="LEGER Isabelle">
+<meta name="description" content="Mission Banque : chèques, virements et solde – activité ludique pour le lycée professionnel, conçue par LEGER Isabelle.">
+<title>Mission Banque – Chèques & Virements | LEGER Isabelle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;600;700;800;900&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --violet:#7c4dff; --rose:#ff4fa3; --orange:#ff8a3d; --jaune:#ffc928; --turq:#12c6b2; --bleu:#3d8bff;
+  --vert:#22c55e; --rouge:#ff4d5e; --ink:#2b2250; --muted:#6f6894;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  font-family:Nunito,system-ui,sans-serif;color:var(--ink);min-height:100vh;line-height:1.5;overflow-x:hidden;
+  background:linear-gradient(-45deg,#ffc6e3,#ffe59a,#b9f5df,#bfdcff,#e3ccff,#ffd0b5);
+  background-size:400% 400%;animation:fondbouge 20s ease infinite;
+}
+@keyframes fondbouge{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+h1,h2,h3,h4{font-family:Fredoka,Nunito,sans-serif;margin:.2em 0;font-weight:700}
+.wrap{position:relative;z-index:1;max-width:1020px;margin:0 auto;padding:18px 16px 110px}
+.hidden{display:none!important}
+.muted{color:var(--muted)}
+.center{text-align:center}
+.arcenciel{background:linear-gradient(90deg,#7c4dff,#ff4fa3,#ff8a3d,#ffc928,#12c6b2,#3d8bff,#7c4dff);background-size:300% 100%;
+  -webkit-background-clip:text;background-clip:text;color:transparent;animation:arc 6s linear infinite}
+@keyframes arc{to{background-position:300% 0}}
+
+/* ---------- Objets flottants ---------- */
+#flotteurs{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.fl{position:absolute;bottom:-70px;animation:monte linear infinite;opacity:.55;filter:drop-shadow(0 4px 6px rgba(0,0,0,.08))}
+@keyframes monte{0%{transform:translateY(0) rotate(0)}100%{transform:translateY(-120vh) rotate(380deg)}}
+
+/* ---------- Header ---------- */
+header.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.logo{display:flex;align-items:center;gap:10px}
+.logo .tl{width:64px}
+.logo h1{font-size:34px;line-height:1}
+.logo small{display:block;font-weight:900;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--violet);margin-top:4px}
+.hdr-droite{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.pill{background:#fff;border-radius:999px;padding:8px 16px;font-weight:900;font-size:13.5px;box-shadow:0 5px 0 rgba(124,77,255,.25);display:flex;align-items:center;gap:8px}
+.pill .ini{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--rose),var(--orange));color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px}
+.btn-son{border:none;cursor:pointer;font-size:20px;background:#fff;border-radius:50%;width:42px;height:42px;box-shadow:0 5px 0 rgba(124,77,255,.25)}
+
+/* ---------- Cartes ---------- */
+.card{background:#fff;border-radius:30px;padding:24px;margin-bottom:20px;box-shadow:0 10px 0 rgba(124,77,255,.16),0 26px 50px rgba(124,77,255,.14)}
+.etiquette{display:inline-block;font-weight:900;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#fff;background:linear-gradient(90deg,var(--rose),var(--orange));border-radius:999px;padding:4px 12px}
+
+/* ---------- Boutons ---------- */
+.btn{font-family:Fredoka,sans-serif;font-weight:600;font-size:18px;border:none;border-radius:18px;padding:12px 22px;cursor:pointer;color:#fff;
+  background:linear-gradient(135deg,#9a72ff,var(--violet));box-shadow:0 6px 0 #5126cc;transition:transform .1s, box-shadow .1s, filter .2s}
+.btn:hover{filter:brightness(1.08);animation:wiggle .5s}
+.btn:active{transform:translateY(5px);box-shadow:0 1px 0 #5126cc}
+.btn:disabled{opacity:.5;cursor:default;animation:none}
+.btn.rose{background:linear-gradient(135deg,#ff7cbd,var(--rose));box-shadow:0 6px 0 #c4247a}
+.btn.or{background:linear-gradient(135deg,#ffe066,var(--jaune) 60%,#ffab1f);color:#4a3000;box-shadow:0 6px 0 #c98a00}
+.btn.turq{background:linear-gradient(135deg,#4fe3d1,var(--turq));box-shadow:0 6px 0 #078f80}
+.btn.blanc{background:#fff;color:var(--violet);box-shadow:0 6px 0 #d9ccff;border:2px solid #ece4ff}
+.btn.petit{font-size:14.5px;padding:8px 14px;border-radius:13px;box-shadow:0 4px 0 #d9ccff}
+.btn.gros{font-size:22px;padding:16px 30px;border-radius:22px}
+@keyframes wiggle{25%{transform:rotate(-2deg)}75%{transform:rotate(2deg)}}
+.pulse{animation:pulse 1.6s ease-in-out infinite}
+@keyframes pulse{50%{transform:scale(1.06);box-shadow:0 6px 0 #c98a00,0 0 0 12px rgba(255,201,40,.25)}}
+input[type=text],input[type=password],select,textarea{font-family:Nunito,sans-serif;font-size:16.5px;font-weight:700;padding:12px 14px;border-radius:15px;border:3px solid #e6dcff;background:#faf8ff;width:100%;color:var(--ink);transition:border-color .2s, box-shadow .2s}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--violet);box-shadow:0 0 0 5px rgba(124,77,255,.18)}
+label{font-weight:900;font-size:14px;display:block;margin:12px 0 6px}
+.row{display:flex;gap:14px;flex-wrap:wrap}
+.row>*{flex:1 1 220px}
+.kov{color:var(--rouge);font-weight:900}.okv{color:#13924a;font-weight:900}
+
+/* ---------- Tirelire ---------- */
+.tl svg{width:100%;height:auto;display:block;overflow:visible}
+.tl .coin{animation:coin 2.8s cubic-bezier(.5,0,.75,0) infinite}
+.tl .corps{animation:sursaut 2.8s ease-in-out infinite;transform-origin:62px 100px}
+.tl .oeil{animation:cligne 4s infinite;transform-origin:92px 54px}
+@keyframes coin{0%{transform:translateY(-14px);opacity:0}15%{opacity:1}55%{transform:translateY(20px);opacity:1}62%,100%{transform:translateY(24px);opacity:0}}
+@keyframes sursaut{0%,55%,100%{transform:none}62%{transform:rotate(-4deg) scale(1.05)}70%{transform:rotate(3deg)}78%{transform:none}}
+@keyframes cligne{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.1)}}
+.danse{animation:danse .9s ease-in-out infinite}
+@keyframes danse{0%,100%{transform:rotate(-6deg) translateY(0)}50%{transform:rotate(6deg) translateY(-12px)}}
+
+/* ---------- Bulle ---------- */
+.bulle{display:flex;gap:14px;align-items:center;margin:4px 0 18px}
+.bulle .tl{width:78px;flex:0 0 auto}
+.bulle .txt{background:linear-gradient(135deg,#fff6fb,#f3eeff);border:3px solid #f0e6ff;border-radius:22px 22px 22px 6px;padding:13px 17px;font-weight:700;font-size:15.5px}
+.bulle .txt b{color:var(--rose)}
+
+/* ---------- Dock tirelire (bas d'écran) ---------- */
+#dock{position:fixed;right:16px;bottom:14px;z-index:50;background:#fff;border-radius:24px;padding:8px 16px 8px 10px;display:flex;align-items:center;gap:8px;
+  box-shadow:0 8px 0 rgba(255,79,163,.3),0 18px 34px rgba(124,77,255,.25);font-family:Fredoka;font-weight:700;font-size:20px}
+#dock .tl{width:62px}
+#dock small{display:block;font-family:Nunito;font-size:11px;font-weight:900;color:var(--muted);letter-spacing:.08em;line-height:1}
+#dock.boing{animation:boing .5s}
+@keyframes boing{30%{transform:scale(1.18) rotate(-4deg)}60%{transform:scale(.95)}100%{transform:none}}
+.flycoin{position:fixed;z-index:9999;font-size:36px;margin:-20px 0 0 -20px;pointer-events:none;transition:transform .75s cubic-bezier(.45,-0.4,.6,1),opacity .75s}
+
+/* ---------- Accueil ---------- */
+.hero{display:grid;grid-template-columns:1.15fr .85fr;gap:20px;align-items:center;margin:6px 0 24px}
+.hero h2{font-size:clamp(36px,6.4vw,62px);line-height:1;color:var(--ink)}
+.hero p.lead{font-size:18px;font-weight:700;max-width:520px}
+.hero .grosse{max-width:310px;margin:0 auto;position:relative}
+.hero .grosse:before{content:"";position:absolute;inset:15% 5% 5%;background:radial-gradient(circle,rgba(255,255,255,.95),transparent 68%);z-index:-1}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.chip{font-weight:900;font-size:14px;border-radius:999px;padding:7px 14px;color:#fff;box-shadow:0 4px 0 rgba(0,0,0,.12)}
+
+/* ---------- Missions ---------- */
+.missions{display:grid;grid-template-columns:repeat(auto-fill,minmax(225px,1fr));gap:18px}
+.mcard{position:relative;border-radius:28px;padding:20px;cursor:pointer;color:#fff;overflow:hidden;
+  background:linear-gradient(140deg,var(--g1),var(--g2));box-shadow:0 9px 0 var(--g3),0 20px 34px rgba(0,0,0,.12);transition:transform .2s}
+.mcard:hover{transform:translateY(-6px) rotate(-1.2deg) scale(1.02)}
+.mcard:after{content:"";position:absolute;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.18);right:-50px;bottom:-60px}
+.mcard.statique{cursor:default}.mcard.statique:hover{transform:none}
+.mnum{position:absolute;top:14px;right:18px;font-family:Fredoka;font-weight:700;font-size:26px;opacity:.45}
+.micon{width:62px;height:62px;border-radius:20px;background:rgba(255,255,255,.95);display:flex;align-items:center;justify-content:center;font-size:32px;box-shadow:0 6px 0 rgba(0,0,0,.12);margin-bottom:12px;animation:flotte 2.6s ease-in-out infinite}
+.mcard:nth-child(2) .micon{animation-delay:.3s}.mcard:nth-child(3) .micon{animation-delay:.6s}.mcard:nth-child(4) .micon{animation-delay:.9s}
+@keyframes flotte{50%{transform:translateY(-7px) rotate(-6deg)}}
+.mcard h3{font-size:22px;text-shadow:0 2px 0 rgba(0,0,0,.12)}
+.mcard p{margin:.3em 0 .9em;font-weight:700;font-size:14.5px;opacity:.95;position:relative;z-index:1}
+.mcard .go{position:relative;z-index:1;display:inline-block;background:#fff;color:var(--ink);font-weight:900;border-radius:999px;padding:6px 14px;font-size:14px}
+.tampon{position:absolute;top:44%;left:50%;transform:translate(-50%,-50%) rotate(-14deg);border:5px solid #fff;color:#fff;font-family:Fredoka;font-weight:700;font-size:26px;
+  padding:4px 16px;border-radius:12px;letter-spacing:.08em;background:rgba(0,0,0,.18);z-index:2;animation:tampon .5s cubic-bezier(.3,1.6,.5,1)}
+@keyframes tampon{from{transform:translate(-50%,-50%) rotate(-14deg) scale(2.4);opacity:0}}
+.mcard.faite{cursor:default}.mcard.faite:hover{transform:none}
+.mcard.faite>*:not(.tampon){opacity:.55}
+
+/* ---------- Hub ---------- */
+.hubtop{display:grid;grid-template-columns:190px 1fr;gap:20px;align-items:center}
+.hubtop .tl{width:100%}
+.jauge{height:26px;border-radius:999px;background:#f1ebff;overflow:hidden;margin:10px 0 4px;box-shadow:inset 0 3px 0 rgba(0,0,0,.05)}
+.jauge>div{height:100%;width:0;border-radius:999px;transition:width 1.2s cubic-bezier(.2,.9,.3,1.2);
+  background:repeating-linear-gradient(45deg,rgba(255,255,255,.35) 0 10px,transparent 10px 20px),linear-gradient(90deg,var(--jaune),var(--orange),var(--rose));
+  background-size:28px 28px,100% 100%;animation:rayures 1s linear infinite}
+@keyframes rayures{to{background-position:28px 0,0 0}}
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+.stat{background:#faf6ff;border:3px solid #efe6ff;border-radius:16px;padding:8px 14px;font-weight:900}
+.stat b{font-family:Fredoka;font-size:22px;color:var(--violet)}
+
+/* ---------- Missions : commun ---------- */
+.mhead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.mhead h2{font-size:27px;display:flex;align-items:center;gap:12px}
+.mhead .micon{width:50px;height:50px;font-size:26px;border-radius:15px;margin:0;background:linear-gradient(140deg,var(--g1),var(--g2));animation:none}
+.etape{font-weight:900;color:var(--rose);text-transform:uppercase;font-size:13px;letter-spacing:.14em;margin-bottom:6px}
+.progress{display:flex;gap:6px;margin:8px 0 16px}
+.progress span{flex:1;height:10px;border-radius:9px;background:#efe8ff}
+.progress span.on{background:linear-gradient(90deg,var(--violet),var(--rose))}
+.progress span.ici{background:#ffd6ec;animation:clign 1s infinite}
+@keyframes clign{50%{background:#ff9fd0}}
+.question{font-family:Fredoka;font-size:25px;font-weight:600;line-height:1.3;margin:4px 0}
+.vf{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:22px 0 8px}
+.vf .btn{font-size:26px;padding:24px;border-radius:24px}
+.vf .v{background:linear-gradient(135deg,#55e08f,#1fb866);box-shadow:0 8px 0 #12844a}
+.vf .f{background:linear-gradient(135deg,#ff8fc6,#ff4f8f);box-shadow:0 8px 0 #c42466}
+.vf .btn.choisi{outline:5px solid var(--jaune);outline-offset:3px;transform:scale(1.04)}
+.enregistre{display:inline-flex;gap:8px;align-items:center;background:#fff7d6;border:3px solid #ffe28a;border-radius:16px;padding:8px 14px;font-weight:900;animation:pop-in .4s cubic-bezier(.3,1.6,.5,1)}
+@keyframes pop-in{from{transform:scale(.5);opacity:0}}
+.entre{animation:entre .45s cubic-bezier(.3,1.4,.5,1)}
+@keyframes entre{from{opacity:0;transform:translateY(24px) scale(.97)}}
+
+/* ---------- Documents ---------- */
+.docs{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin-bottom:16px}
+.ticket{background:#fffef2;border:3px dashed #f3d97a;border-radius:16px;padding:14px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13.5px;transform:rotate(-1deg)}
+.idcard{background:linear-gradient(135deg,#dff0ff,#f6e6ff);border:3px solid #cfe0ff;border-radius:18px;padding:14px;display:flex;gap:12px;align-items:center;transform:rotate(1deg)}
+.idcard .photo{width:52px;height:62px;border-radius:10px;background:linear-gradient(180deg,#bcd3ff,#93b4f0);display:flex;align-items:flex-end;justify-content:center;font-size:36px;overflow:hidden}
+.idcard .zone{padding:2px 6px}
+.cheque{position:relative;border-radius:18px;padding:18px 20px 14px;overflow:hidden;font-size:14px;border:3px solid #b9dcff;
+  background:repeating-linear-gradient(135deg,rgba(61,139,255,.06) 0 6px,transparent 6px 12px),linear-gradient(120deg,#e5f4ff,#ffffff 45%,#efeaff);
+  box-shadow:0 10px 0 rgba(61,139,255,.18)}
+.cheque .banque{font-family:Fredoka;font-weight:700;color:#1b5fae;font-size:17px}
+.cheque .ligne{display:flex;align-items:flex-end;gap:8px;margin:10px 0;flex-wrap:wrap}
+.cheque .lib{color:#3c5a7a;font-size:12.5px;font-weight:800;white-space:nowrap}
+.cheque .manus{font-family:Caveat,cursive;font-size:25px;color:#14306b;border-bottom:2px dashed #9cb8d8;min-height:30px;padding:0 6px}
+.cheque .chiffres{font-family:Caveat,cursive;font-size:28px;color:#14306b;border:3px solid #9cb8d8;border-radius:10px;background:#fff;padding:0 12px;min-width:140px;text-align:right;display:inline-block}
+.cheque .bas{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-top:8px}
+.cheque .titulaire{font-size:12.5px;color:#3c5a7a;font-weight:800}
+.cheque .sign{min-width:150px;height:46px;border-bottom:2px dashed #9cb8d8;display:flex;align-items:center;justify-content:center}
+.cheque .num{font-family:ui-monospace,monospace;color:#6b86a6;font-size:12px;margin-top:8px;letter-spacing:.08em}
+.cheque .vide{color:#a9bbd2;font-family:Nunito;font-size:13px;font-style:italic}
+.zone{position:relative;cursor:pointer;border-radius:9px;transition:background .15s, box-shadow .15s}
+.interactif .zone:hover{background:rgba(255,201,40,.3)}
+.zone.ok{box-shadow:0 0 0 4px var(--vert);background:rgba(34,197,94,.12)}
+.zone.ko{box-shadow:0 0 0 4px var(--rouge);background:rgba(255,77,94,.12)}
+.zone .mark{position:absolute;top:-13px;right:-11px;font-size:15px;background:#fff;border-radius:50%;width:27px;height:27px;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 8px rgba(0,0,0,.2);animation:pop-in .3s cubic-bezier(.3,1.6,.5,1)}
+.legend{display:flex;gap:8px;flex-wrap:wrap;font-size:13.5px;margin:14px 0}
+.legend span{background:#faf6ff;border:2px solid #efe6ff;border-radius:12px;padding:5px 10px;font-weight:700}
+.legend span b{color:var(--violet)}
+.facture{background:#fff;border:3px solid #efe6ff;border-radius:18px;padding:16px;font-size:14.5px}
+.facture .entete{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;border-bottom:3px dotted #efe6ff;padding-bottom:8px;margin-bottom:10px}
+.comptes{width:100%;border-collapse:collapse;font-size:14.5px;margin:6px 0}
+.comptes td{padding:8px;border-bottom:2px solid #f5f0ff}
+.comptes td.num{text-align:right;font-variant-numeric:tabular-nums;font-weight:900}
+.ordre{background:linear-gradient(135deg,#e9fffb,#f3f0ff);border:3px solid #c9f3ec;border-radius:22px;padding:18px}
+.mono{font-family:ui-monospace,Menlo,Consolas,monospace;letter-spacing:.03em}
+.releve{width:100%;border-collapse:collapse;font-size:14.5px;background:#fff;border-radius:16px;overflow:hidden;border:3px solid #ffe3a3}
+.releve th{background:linear-gradient(90deg,var(--jaune),var(--orange));color:#3b2300;padding:10px 8px;text-align:left;font-family:Fredoka}
+.releve td{padding:9px 8px;border-bottom:2px solid #fff3d4}
+.releve td.n{text-align:right;font-variant-numeric:tabular-nums;font-weight:900}
+.deb{color:#d4243a}.cre{color:#11934c}
+
+/* ---------- Fin de mission ---------- */
+.bravo{text-align:center;padding:10px 0}
+.bravo .tl{width:180px;margin:0 auto}
+.bravo h2{font-size:42px}
+
+/* ---------- Résultats & récompense ---------- */
+.coffre{max-width:560px;margin:0 auto;text-align:center}
+.coffre .tl{width:220px;margin:0 auto}
+.secoue{animation:secoue .12s linear 10}
+@keyframes secoue{25%{transform:translateX(-10px) rotate(-6deg)}75%{transform:translateX(10px) rotate(6deg)}}
+.explose{animation:explose .5s ease-in forwards}
+@keyframes explose{to{transform:scale(1.8);opacity:0}}
+.eclat{position:fixed;z-index:9998;font-size:30px;pointer-events:none;transition:transform 1.1s cubic-bezier(.2,.8,.3,1),opacity 1.1s}
+.recompense{border-radius:34px;padding:30px 24px;color:#fff;text-align:center;position:relative;overflow:hidden;margin-bottom:20px;
+  box-shadow:0 12px 0 rgba(0,0,0,.15),0 30px 60px rgba(0,0,0,.18);animation:retourne 1s cubic-bezier(.3,1.3,.5,1)}
+@keyframes retourne{from{transform:perspective(900px) rotateY(90deg) scale(.6);opacity:0}}
+.recompense:before{content:"";position:absolute;inset:-50%;background:conic-gradient(from 0deg,transparent 0 20deg,rgba(255,255,255,.18) 20deg 40deg,transparent 40deg 60deg,rgba(255,255,255,.18) 60deg 80deg,transparent 80deg 100deg,rgba(255,255,255,.18) 100deg 120deg,transparent 120deg 140deg,rgba(255,255,255,.18) 140deg 160deg,transparent 160deg 180deg,rgba(255,255,255,.18) 180deg 200deg,transparent 200deg 220deg,rgba(255,255,255,.18) 220deg 240deg,transparent 240deg 260deg,rgba(255,255,255,.18) 260deg 280deg,transparent 280deg 300deg,rgba(255,255,255,.18) 300deg 320deg,transparent 320deg 340deg,rgba(255,255,255,.18) 340deg 360deg);animation:tourne 14s linear infinite}
+@keyframes tourne{to{transform:rotate(360deg)}}
+.recompense>*{position:relative}
+.medaille{font-size:110px;line-height:1;animation:medaille 2.2s ease-in-out infinite;display:inline-block;filter:drop-shadow(0 10px 12px rgba(0,0,0,.25))}
+@keyframes medaille{50%{transform:translateY(-10px) rotate(8deg) scale(1.06)}}
+.recompense h2{font-size:42px;text-shadow:0 3px 0 rgba(0,0,0,.15)}
+.recompense .moy{font-family:Fredoka;font-size:64px;font-weight:700;line-height:1;text-shadow:0 4px 0 rgba(0,0,0,.15)}
+.recompense p{font-weight:800;font-size:17px;max-width:520px;margin:8px auto}
+.scores{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.score{border-radius:20px;padding:14px;color:#fff;background:linear-gradient(140deg,var(--g1),var(--g2));box-shadow:0 6px 0 var(--g3)}
+.score b{font-family:Fredoka;font-size:34px;display:block;line-height:1.1}
+.badges{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.badge{text-align:center;border-radius:22px;padding:14px 10px;background:#faf6ff;border:3px dashed #e3d8ff;font-weight:900;font-size:14px}
+.badge .ic{font-size:44px;display:block}
+.badge.gagne{background:linear-gradient(135deg,#fff3c4,#ffd6ec);border:3px solid var(--jaune);animation:pop-in .6s cubic-bezier(.3,1.6,.5,1) both}
+.badge.gagne .ic{animation:flotte 2s ease-in-out infinite}
+.badge.verrou{filter:grayscale(1);opacity:.55}
+.code-box{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:15px;word-break:break-all;background:#2b2250;color:#ffe27a;border-radius:18px;padding:16px;margin:10px 0;user-select:all}
+
+/* ---------- Enseignant ---------- */
+.onglets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.onglet{font-family:Fredoka;font-weight:600;font-size:16px;border:3px solid #ece4ff;background:#fff;border-radius:16px;padding:9px 16px;cursor:pointer;color:var(--ink)}
+.onglet.actif{background:linear-gradient(135deg,var(--violet),var(--rose));color:#fff;border-color:transparent}
+table.prof{width:100%;border-collapse:collapse;font-size:14px}
+table.prof th{background:linear-gradient(90deg,var(--violet),var(--rose));color:#fff;padding:9px 7px;text-align:left;font-family:Fredoka;font-weight:600}
+table.prof td{padding:8px 7px;border-bottom:2px solid #f3eeff}
+.scroll{overflow-x:auto}
+.projo{font-size:18px}
+.projo .question{font-size:32px}
+.reponse{display:inline-block;font-family:Fredoka;font-size:40px;font-weight:700;color:#fff;border-radius:20px;padding:6px 30px;margin:10px 0;animation:pop-in .5s cubic-bezier(.3,1.6,.5,1)}
+.reponse.vrai{background:linear-gradient(135deg,#55e08f,#1fb866)}.reponse.faux{background:linear-gradient(135deg,#ff8fc6,#ff4f8f)}
+.explic{background:#f6fff9;border:3px solid #c3f0d5;border-radius:18px;padding:14px 16px;font-size:17px;animation:entre .4s}
+.nav-corr{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-top:18px}
+#corrige h4{color:var(--violet);margin-top:16px}
+
+footer{margin-top:26px;text-align:center;font-size:13.5px;font-weight:700;color:#5a4f86}
+footer b{color:var(--rose)}
+
+/* ---------- Effets ---------- */
+.confetti{position:fixed;top:-14px;width:10px;height:15px;z-index:9999;pointer-events:none;animation:tombe linear forwards;border-radius:3px}
+@keyframes tombe{to{transform:translateY(106vh) rotate(760deg)}}
+.shake{animation:shake .4s}
+@keyframes shake{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+
+@media (max-width:760px){
+  .hero{grid-template-columns:1fr}.hero .grosse{max-width:200px;order:-1}
+  .hubtop{grid-template-columns:110px 1fr}
+}
+@media (max-width:560px){
+  .question{font-size:20px}.vf{grid-template-columns:1fr}.logo h1{font-size:27px}
+  .cheque .manus{font-size:21px}.cheque .chiffres{font-size:23px;min-width:110px}
+  #dock{transform:scale(.85);transform-origin:bottom right}
+}
+@media print{
+  body{background:#fff;animation:none}#flotteurs,#dock,.no-print,header.top,footer{display:none!important}
+  .card{box-shadow:none;border:2px solid #ddd}.recompense{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important}}
+</style>
+</head>
+<body>
+<div id="flotteurs"></div>
+<div class="wrap">
+
+  <header class="top">
+    <div class="logo">
+      <div class="tl" data-tl></div>
+      <div><h1>Mission <span class="arcenciel">Banque</span></h1><small>Chèques · Virements · Solde</small></div>
+    </div>
+    <div class="hdr-droite">
+      <div class="pill"><span class="ini">IL</span>Une activité de LEGER Isabelle</div>
+      <button class="btn-son no-print" id="btnSon" title="Activer / couper le son">🔊</button>
+    </div>
+  </header>
+
+  <!-- ============ ACCUEIL ============ -->
+  <section id="ecranAccueil">
+    <div class="hero entre">
+      <div>
+        <span class="etiquette">Éco-Gestion · Lycée pro</span>
+        <h2>Remplis la <span class="arcenciel">tirelire</span> en 4 missions !</h2>
+        <p class="lead">Contrôle des chèques, envoie des virements, calcule des soldes… Chaque réponse fait tomber une pièce dans la tirelire. À la fin, ouvre-la pour découvrir ta récompense ! 🎁</p>
+        <div class="chips">
+          <span class="chip" style="background:var(--violet)">🧠 Quiz</span><span class="chip" style="background:var(--orange)">🕵️ Chèques</span>
+          <span class="chip" style="background:var(--turq)">💸 Virements</span><span class="chip" style="background:var(--rose)">🧮 Solde</span>
+        </div>
+      </div>
+      <div class="grosse"><div class="tl" data-tl></div></div>
+    </div>
+
+    <div class="card entre">
+      <div class="bulle"><div class="tl" data-tl></div><div class="txt">Coucou ! Moi c'est <b>Pépite</b>, la tirelire de la classe 🪙 Ouvre ton compte élève et c'est parti !</div></div>
+      <div><label for="inNom">✏️ Ton NOM et ton prénom</label><input type="text" id="inNom" placeholder="Ex : DUPONT Lina" autocomplete="off"></div>
+      <p id="errAccueil" class="kov hidden">Écris ton nom et ton prénom pour commencer 😉</p>
+      <div style="margin-top:18px"><button class="btn rose gros" id="btnGo">🚀 C'est parti !</button></div>
+    </div>
+
+    <div class="missions" id="apercu"></div>
+    <div class="center no-print" style="margin-top:24px"><button class="btn blanc petit" id="btnProf">🔒 Espace enseignant</button></div>
+  </section>
+
+  <!-- ============ HUB ============ -->
+  <section id="ecranHub" class="hidden">
+    <div class="card entre">
+      <div class="hubtop">
+        <div class="tl" data-tl></div>
+        <div>
+          <div class="bulle" style="margin:0 0 6px"><div class="txt" id="hubBulle" style="width:100%"></div></div>
+          <div class="jauge"><div id="jaugeFill"></div></div>
+          <div class="stats"><span class="stat">🪙 <b id="nbPieces">0</b> / <span id="maxPieces">20</span> pièces</span><span class="stat">🎯 <b id="nbMissions">0</b> / 4 missions</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="missions" id="listeMissions"></div>
+
+    <div class="card center entre" style="margin-top:24px">
+      <span class="etiquette">Fin de séance</span>
+      <h3 style="font-size:26px">🎁 Ouvre ta tirelire !</h3>
+      <p class="muted" style="font-weight:700">Quand tes 4 missions sont terminées, demande le <b>code secret</b> à ton enseignante pour découvrir tes résultats et ta récompense.</p>
+      <button class="btn or gros" id="btnResultats">🔓 Découvrir mes résultats</button>
+      <div style="margin-top:14px"><button class="btn blanc petit" id="btnChanger">Changer d'élève</button></div>
+    </div>
+  </section>
+
+  <!-- ============ MISSION ============ -->
+  <section id="ecranMission" class="hidden">
+    <div class="card entre">
+      <div class="mhead"><h2 id="missionTitre"></h2></div>
+      <div id="missionBody"></div>
+    </div>
+  </section>
+
+  <!-- ============ RÉSULTATS ============ -->
+  <section id="ecranResultats" class="hidden">
+    <div class="card entre" id="resVerrou">
+      <div class="coffre">
+        <div class="tl" data-tl id="tlCoffre"></div>
+        <h2 style="font-size:32px">Ta tirelire est prête à être ouverte !</h2>
+        <p style="font-weight:700">Entre le <b>code secret</b> donné par ton enseignante.</p>
+        <input type="password" id="inCodeEleve" placeholder="Code secret" style="text-align:center;font-size:22px;max-width:320px">
+        <p id="errCodeEleve" class="kov hidden">Ce n'est pas le bon code. Demande-le à ton enseignante ! 🤫</p>
+        <div style="margin-top:16px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+          <button class="btn or gros" id="btnOuvrir">🔓 Ouvrir ma tirelire</button>
+          <button class="btn blanc petit" id="btnResRetour">← Retour</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="resAffiche" class="hidden">
+      <div class="recompense" id="carteRecompense"></div>
+      <div class="card">
+        <span class="etiquette">Tes résultats</span>
+        <h3 style="font-size:24px">Mission par mission</h3>
+        <div class="scores" id="resScores"></div>
+      </div>
+      <div class="card">
+        <span class="etiquette">Ta collection</span>
+        <h3 style="font-size:24px">Tes badges</h3>
+        <div class="badges" id="resBadges"></div>
+      </div>
+      <div class="card">
+        <span class="etiquette">À transmettre</span>
+        <h3 style="font-size:24px">🎟️ Ton code de résultat</h3>
+        <p class="muted" style="font-weight:700">Copie ce code <b>en entier</b> et envoie-le à ton enseignante (ENT, mail…). S'il est modifié, ça se verra !</p>
+        <div class="code-box" id="codeResultat"></div>
+        <div class="row no-print" style="gap:10px">
+          <button class="btn" id="btnCopier" style="flex:0 0 auto">📋 Copier le code</button>
+          <button class="btn or" id="btnImprimer" style="flex:0 0 auto">🖨️ Imprimer</button>
+          <button class="btn blanc" id="btnRetourHub" style="flex:0 0 auto">← Retour</button>
+        </div>
+        <p id="copieOk" class="okv hidden">Code copié ✅</p>
+        <p style="font-size:12.5px" class="muted">Mission Banque — activité de LEGER Isabelle, Éco-Gestion.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ENSEIGNANT ============ -->
+  <section id="ecranProf" class="hidden">
+    <div class="card entre" id="profLogin" style="max-width:520px;margin:0 auto 18px">
+      <span class="etiquette">Accès réservé</span>
+      <h2>🔒 Espace enseignant</h2>
+      <input type="password" id="inProf" placeholder="Code enseignant">
+      <p id="errProf" class="kov hidden">Code incorrect.</p>
+      <div class="row" style="margin-top:14px;gap:10px"><button class="btn" id="btnProfOk" style="flex:0 0 auto">Entrer</button><button class="btn blanc" id="btnProfRetour" style="flex:0 0 auto">← Retour</button></div>
+    </div>
+    <div id="profZone" class="hidden">
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+          <h2>👋 Bonjour Madame LEGER</h2>
+          <div style="display:flex;gap:8px"><button class="btn blanc petit" id="btnPleinEcran">⛶ Plein écran</button><button class="btn blanc petit" id="btnProfQuit">Quitter</button></div>
+        </div>
+        <div class="onglets">
+          <button class="onglet actif" data-o="corr">🎓 Correction collective</button>
+          <button class="onglet" data-o="res">📊 Résultats de la classe</button>
+          <button class="onglet" data-o="cle">🗝️ Corrigé & codes</button>
+        </div>
+        <div id="oCorr"></div>
+        <div id="oRes" class="hidden">
+          <p class="muted" style="font-weight:700">Collez un ou plusieurs codes de résultat (un par ligne), puis cliquez sur « Vérifier ».</p>
+          <textarea id="codesProf" rows="6" placeholder="MB.xxxxxxxx.XXXXXXX"></textarea>
+          <div class="row" style="margin-top:12px;gap:10px">
+            <button class="btn" id="btnVerif" style="flex:0 0 auto">✅ Vérifier les codes</button>
+            <button class="btn or" id="btnCsv" style="flex:0 0 auto">⬇ Exporter (CSV tableur)</button>
+          </div>
+          <div class="scroll" style="margin-top:16px"><div id="resProf"></div></div>
+        </div>
+        <div id="oCle" class="hidden"><div id="corrige"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>Mission Banque — activité conçue par <b>LEGER Isabelle</b>, enseignante en Éco-Gestion.</footer>
+</div>
+
+<div id="dock" class="hidden" title="Ta tirelire"><div class="tl" data-tl id="dockTl"></div><div><small>MA TIRELIRE</small>🪙 <span id="dockNb">0</span></div></div>
+
+<script>
+/* =========================================================
+   PARAMÈTRES ENSEIGNANT (modifiables)
+   ========================================================= */
+const CODE_ENSEIGNANT = "LEGER2026";   // ouvre l'espace enseignant
+const CODE_ELEVE      = "PEPITE";      // code secret à donner aux élèves pour ouvrir leurs résultats
+const SEL = "LEGER-Isabelle-EcoGestion-MB3";   // clé de contrôle des codes de résultat
+const MAGASIN = "AU PANIER FLEURI";
+const VILLE_MAGASIN = "Reims";
+const DATE_JOUR = "17/10/2026";        // date de l'achat dans la mission « Détective »
+
+/* ========================================================= */
+const $ = s => document.querySelector(s);
+const pick = a => a[Math.floor(Math.random()*a.length)];
+const esc = s => String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const eur = c => (c/100).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2})+" €";
+const eurNb = c => (c/100).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2});
+const parseEur = s => { const t=String(s).replace(/\s|€/g,'').replace(',','.'); if(!/^-?\d+(\.\d{1,2})?$/.test(t)) return NaN; return Math.round(parseFloat(t)*100); };
+
+/* ---------- La tirelire (dessin SVG) ---------- */
+const TIRELIRE = `<svg viewBox="0 0 130 112" xmlns="http://www.w3.org/2000/svg" aria-label="Tirelire Pépite">
+  <defs>
+    <linearGradient id="tlBody" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb3cd"/><stop offset=".55" stop-color="#ff6f9f"/><stop offset="1" stop-color="#e2457c"/></linearGradient>
+    <linearGradient id="tlCoin" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff1b0"/><stop offset=".5" stop-color="#f7c948"/><stop offset="1" stop-color="#d9981c"/></linearGradient>
+  </defs>
+  <g class="coin"><circle cx="64" cy="14" r="10" fill="url(#tlCoin)" stroke="#b77c0c" stroke-width="1.5"/><text x="64" y="18.5" text-anchor="middle" font-family="Fredoka,Arial" font-weight="700" font-size="12" fill="#8a5a00">€</text></g>
+  <g class="corps">
+    <ellipse cx="62" cy="106" rx="40" ry="4" fill="rgba(0,0,0,.15)"/>
+    <rect x="30" y="84" width="13" height="18" rx="5" fill="#d93d73"/><rect x="48" y="86" width="13" height="17" rx="5" fill="#e2457c"/>
+    <rect x="72" y="86" width="13" height="17" rx="5" fill="#e2457c"/><rect x="88" y="84" width="13" height="18" rx="5" fill="#d93d73"/>
+    <path d="M17 62 c-9 -3 -11 7 -4 8 c6 1 6 -9 -2 -9" fill="none" stroke="#e2457c" stroke-width="3.2" stroke-linecap="round"/>
+    <ellipse cx="62" cy="64" rx="46" ry="32" fill="url(#tlBody)"/>
+    <path d="M80 38 L92 20 Q96 18 97 23 L98 42 Z" fill="#ff8fb2" stroke="#e2457c" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse cx="44" cy="50" rx="17" ry="8" fill="#fff" opacity=".4" transform="rotate(-18 44 50)"/>
+    <rect x="50" y="33.5" width="26" height="5" rx="2.5" fill="#9b2453"/>
+    <ellipse cx="108" cy="66" rx="11" ry="13" fill="#ff8fb2" stroke="#e2457c" stroke-width="2"/>
+    <ellipse cx="105" cy="62" rx="2" ry="3.2" fill="#9b2453"/><ellipse cx="111" cy="62" rx="2" ry="3.2" fill="#9b2453"/>
+    <g class="oeil"><circle cx="92" cy="54" r="4.4" fill="#2a1b3d"/><circle cx="93.5" cy="52.5" r="1.5" fill="#fff"/></g>
+    <ellipse cx="90" cy="71" rx="5.5" ry="3.2" fill="#ff4f8b" opacity=".45"/>
+    <path d="M86 77 q5 4.5 10 0" fill="none" stroke="#9b2453" stroke-width="2" stroke-linecap="round"/>
+  </g>
+</svg>`;
+function dessinerTirelires(){ document.querySelectorAll("[data-tl]").forEach(el=>{ if(!el.innerHTML.trim()) el.innerHTML=TIRELIRE; }); }
+const bulle = html => `<div class="bulle"><div class="tl">${TIRELIRE}</div><div class="txt">${html}</div></div>`;
+
+/* ---------- Objets flottants en fond ---------- */
+(function(){
+  const items=["🪙","💶","💳","⭐","🪙","✨","💰","🧾","🪙","🏦"];
+  const z=$("#flotteurs");
+  for(let i=0;i<18;i++){
+    const d=document.createElement("div"); d.className="fl"; d.textContent=items[i%items.length];
+    d.style.left=(Math.random()*96)+"vw"; d.style.fontSize=(20+Math.random()*26)+"px";
+    d.style.animationDuration=(14+Math.random()*16)+"s"; d.style.animationDelay=(-Math.random()*25)+"s";
+    z.appendChild(d);
+  }
+})();
+
+/* ---------- Sons (Web Audio, sans fichier) ---------- */
+let sonOn = true, AC=null;
+try{ sonOn = localStorage.getItem("mbSon")!=="0"; }catch(e){}
+function majBoutonSon(){ $("#btnSon").textContent = sonOn?"🔊":"🔇"; }
+$("#btnSon").onclick=()=>{ sonOn=!sonOn; try{localStorage.setItem("mbSon",sonOn?"1":"0");}catch(e){} majBoutonSon(); son("clic"); };
+function son(type){
+  if(!sonOn) return;
+  try{
+    AC = AC || new (window.AudioContext||window.webkitAudioContext)();
+    const T={coin:{n:[988,1319],d:.07,w:"square",v:.06},clic:{n:[660,880],d:.05,w:"triangle",v:.08},
+             fanfare:{n:[523,659,784,1047,784,1047],d:.13,w:"triangle",v:.12},erreur:{n:[300,220],d:.12,w:"sawtooth",v:.05},
+             tampon:{n:[180,120],d:.06,w:"square",v:.07},roulement:{n:Array(14).fill(0).map((_,i)=>200+i*25),d:.05,w:"triangle",v:.05}}[type];
+    T.n.forEach((f,i)=>{ const o=AC.createOscillator(), g=AC.createGain(); const t=AC.currentTime+i*T.d;
+      o.type=T.w; o.frequency.value=f; g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(T.v,t+.01); g.gain.exponentialRampToValueAtTime(.0001,t+.28);
+      o.connect(g); g.connect(AC.destination); o.start(t); o.stop(t+.3); });
+  }catch(e){}
+}
+
+/* ---------- Nombres en lettres (pour les chèques affichés) ---------- */
+const U=["zéro","un","deux","trois","quatre","cinq","six","sept","huit","neuf","dix","onze","douze","treize","quatorze","quinze","seize"];
+const DIZ={2:"vingt",3:"trente",4:"quarante",5:"cinquante",6:"soixante"};
+function n100(n){
+  if(n<17) return U[n];
+  if(n<20) return "dix-"+U[n-10];
+  const t=Math.floor(n/10), u=n%10;
+  if(t===7) return "soixante"+(u===1?" et onze":"-"+n100(10+u));
+  if(t===8) return u===0?"quatre-vingts":"quatre-vingt-"+U[u];
+  if(t===9) return "quatre-vingt-"+n100(10+u);
+  return DIZ[t]+(u===0?"":u===1?" et un":"-"+U[u]);
+}
+function n1000(n){ const h=Math.floor(n/100), r=n%100; if(h===0) return n100(r); const c=h===1?"cent":U[h]+" cent"; if(r===0) return h>1?c+"s":c; return c+" "+n100(r); }
+function enLettres(n){ if(n===0) return "zéro"; const m=Math.floor(n/1000), r=n%1000; let s=""; if(m>0) s=m===1?"mille":n1000(m).replace(/(cent|vingt)s$/,"$1")+" mille"; if(r>0) s+=(s?" ":"")+n1000(r); return s; }
+function montantLettres(c){ const e=Math.floor(c/100), ce=c%100, p=[]; if(e>0) p.push(enLettres(e)+(e>1?" euros":" euro")); if(ce>0) p.push(enLettres(ce)+(ce>1?" centimes":" centime")); return p.length?p.join(" et "):"zéro euro"; }
+
+/* =========================================================
+   CONTENU (identique pour tous les élèves → correction collective)
+   ========================================================= */
+const MISSIONS=[
+  {id:"quiz",     em:"🧠", g1:"#a07bff",g2:"#6a3cf0",g3:"#4a22b8", titre:"Le Grand Quiz",       desc:"10 questions Vrai / Faux sur le chèque et le virement.",
+   badge:{ic:"🧠",nom:"Cerveau en or"}},
+  {id:"detective",em:"🕵️", g1:"#ffb04d",g2:"#ff6a3d",g3:"#c94515", titre:"Détective du chèque", desc:"Contrôle 4 chèques reçus à la caisse : 7 points sur chacun.",
+   badge:{ic:"🔍",nom:"Œil de lynx"}},
+  {id:"virement", em:"💸", g1:"#35e0c8",g2:"#0fa8c9",g3:"#08788f", titre:"Opération Virement",  desc:"Remplis 3 ordres de virement pour payer les fournisseurs.",
+   badge:{ic:"🚀",nom:"As du virement"}},
+  {id:"solde",    em:"🧮", g1:"#ff8fc6",g2:"#ff4f8f",g3:"#c42466", titre:"Le compte est bon",   desc:"Calcule le solde de 3 relevés et indique la situation.",
+   badge:{ic:"🧮",nom:"Calculatrice humaine"}}
+];
+
+const QUIZ=[
+ {q:"En cas de différence entre le montant écrit en chiffres et le montant écrit en lettres, c'est le montant en lettres qui est retenu.",r:true,
+  e:"La somme écrite en lettres prime sur la somme en chiffres. (Source : Service-Public.fr – Paiement par chèque)"},
+ {q:"Un chèque émis en France métropolitaine est valable 3 mois.",r:false,
+  e:"Un chèque est valable 1 an et 8 jours. (Source : Service-Public.fr)"},
+ {q:"Le tireur (ou émetteur) est la personne qui rédige, signe et paie avec le chèque.",r:true,
+  e:"Le tireur rédige et signe le chèque ; le bénéficiaire le reçoit ; le tiré est la banque du tireur, qui paie."},
+ {q:"Le bénéficiaire d'un chèque, c'est la banque qui paie.",r:false,
+  e:"La banque qui paie s'appelle le « tiré ». Le bénéficiaire est la personne (ou l'entreprise) à l'ordre de qui le chèque est rédigé."},
+ {q:"On peut postdater un chèque (écrire une date future) sans aucun risque.",r:false,
+  e:"Le chèque doit être daté du jour de sa rédaction. S'il est postdaté, l'émetteur risque une amende égale à 6 % du montant (minimum 0,75 €). (Source : Service-Public.fr)"},
+ {q:"Un commerçant peut refuser le paiement par chèque s'il en a clairement informé sa clientèle.",r:true,
+  e:"Vrai en règle générale (affichage visible). Exception : un commerçant adhérent d'un centre de gestion agréé doit accepter les chèques. (Source : Service-Public.fr)"},
+ {q:"Pour remplir un chèque, mieux vaut utiliser un crayon à papier : on peut corriger en cas d'erreur.",r:false,
+  e:"On utilise un stylo à encre indélébile et on ne laisse pas d'espace avant les sommes, pour éviter les falsifications. (Source : Crédit Agricole – mini-guide du chèque)"},
+ {q:"En France, un IBAN compte 27 caractères et commence par « FR ».",r:true,
+  e:"L'IBAN français : FR + 2 chiffres de contrôle + 23 caractères (code banque, code guichet, numéro de compte, clé RIB) = 27 caractères."},
+ {q:"Solde final = solde initial + débits − crédits.",r:false,
+  e:"C'est l'inverse : solde final = solde initial + crédits (entrées d'argent) − débits (sorties d'argent)."},
+ {q:"Un solde négatif signifie que le compte est « à découvert » (solde débiteur).",r:true,
+  e:"Solde négatif = solde débiteur = compte à découvert. Solde positif = solde créditeur."}
+];
+
+const CHAMPS=[
+ {k:"chiffres",  l:"Montant en chiffres",  r:"identique au total du ticket"},
+ {k:"lettres",   l:"Montant en lettres",   r:"identique au total du ticket"},
+ {k:"ordre",     l:"Bénéficiaire (ordre)", r:`exactement « ${MAGASIN} »`},
+ {k:"lieu",      l:"Lieu",                 r:"renseigné"},
+ {k:"date",      l:"Date",                 r:`date du jour de l'achat (${DATE_JOUR})`},
+ {k:"signature", l:"Signature",            r:"présente"},
+ {k:"identite",  l:"Identité",             r:"nom de la pièce d'identité = titulaire du chèque"}
+];
+const CHEQUES=[
+ {ticket:18675, titulaire:"LEROY Sarah",  idNom:"LEROY Sarah",  chiffres:18675,  lettres:18775,  ordre:MAGASIN,             lieu:"Reims", date:"27/10/2026", signature:true,  num:"3891896"},
+ {ticket:5490,  titulaire:"MARTIN Léa",   idNom:"MARTIN Léa",   chiffres:5490,   lettres:5490,   ordre:MAGASIN,             lieu:"Reims", date:DATE_JOUR,    signature:true,  num:"5120447"},
+ {ticket:31240, titulaire:"BENALI Yanis", idNom:"BENALI Rayan", chiffres:31240,  lettres:31240,  ordre:"AU PANNIER FLEURI", lieu:"Reims", date:DATE_JOUR,    signature:false, num:"7734021"},
+ {ticket:124900,titulaire:"DUBOIS Chloé", idNom:"DUBOIS Chloé", chiffres:129400, lettres:124900, ordre:MAGASIN,             lieu:"",      date:DATE_JOUR,    signature:true,  num:"2265918"}
+];
+function erreursCheque(ch){ const e=new Set();
+  if(ch.chiffres!==ch.ticket) e.add("chiffres"); if(ch.lettres!==ch.ticket) e.add("lettres"); if(ch.ordre!==MAGASIN) e.add("ordre");
+  if(!ch.lieu) e.add("lieu"); if(ch.date!==DATE_JOUR) e.add("date"); if(!ch.signature) e.add("signature"); if(ch.idNom!==ch.titulaire) e.add("identite"); return e; }
+
+const ENTREPRISE="SPORT'AVENIR";
+const COMPTES=[{id:"cc1",nom:"Compte courant principal",type:"courant"},{id:"cc2",nom:"Compte courant secondaire",type:"courant"},{id:"liv",nom:"Livret d'épargne",type:"epargne"}];
+const CARNET=["TEXTILO SAS","BALLONS & CO","IMPRIM'EXPRESS","TRANSPORTS RAPID'EST"];
+const VIR=[
+ {soldes:{cc1:325040,cc2:82000,liv:1500000},benef:"TEXTILO SAS",fact:"F-2026-118",montant:124560,objet:"50 maillots d'entraînement",
+  iban:"FR76 3000 6000 0112 3456 7890 189",options:["FR76 3000 6000 0112 3456 7809 189","FR76 3000 6000 0112 3456 7890 189","FR76 3000 6000 0121 3456 7890 189"]},
+ {soldes:{cc1:41025,cc2:210000,liv:980000},benef:"BALLONS & CO",fact:"BC-0457",montant:98640,objet:"40 ballons de handball",
+  iban:"FR76 1027 8061 0000 0204 5170 151",options:["FR76 1027 8061 0000 0204 5170 151","FR76 1027 8061 0000 0240 5170 151","FR76 1027 8016 0000 0204 5170 151"]},
+ {soldes:{cc1:512000,cc2:15000,liv:1200000},benef:"IMPRIM'EXPRESS",fact:"IE-2026-073",montant:34275,objet:"500 flyers « Portes ouvertes »",
+  iban:"FR76 1820 6002 1065 4321 0987 612",options:["FR76 1820 6002 1065 4312 0987 612","FR76 1820 6002 1056 4321 0987 612","FR76 1820 6002 1065 4321 0987 612"]}
+];
+const bonCompte = V => COMPTES.find(x=>x.type==="courant"&&V.soldes[x.id]>=V.montant);
+
+const RELEVES=[
+ {init:84530, ops:[{j:3,lib:"Paiement CB – Supermarché",cred:false,m:6245},{j:7,lib:"Virement – Salaire",cred:true,m:128000},{j:11,lib:"Prélèvement – Téléphone",cred:false,m:1999},{j:18,lib:"Retrait DAB",cred:false,m:6000},{j:24,lib:"Virement – Loyer",cred:false,m:54000}]},
+ {init:12000, ops:[{j:4,lib:"Prélèvement – Assurance",cred:false,m:4860},{j:9,lib:"Paiement CB – Station-service",cred:false,m:7520},{j:13,lib:"Remise de chèque",cred:true,m:3500},{j:21,lib:"Chèque n° 451",cred:false,m:9250},{j:27,lib:"Retrait DAB",cred:false,m:4000}]},
+ {init:-4580, ops:[{j:2,lib:"Virement – Remboursement",cred:true,m:15000},{j:6,lib:"Paiement CB – Restaurant",cred:false,m:3390},{j:15,lib:"Dépôt d'espèces",cred:true,m:20000},{j:20,lib:"Prélèvement – Téléphone",cred:false,m:2499},{j:28,lib:"Virement – Prime",cred:true,m:7550}]}
+];
+RELEVES.forEach(R=>{ R.totC=R.ops.filter(o=>o.cred).reduce((a,o)=>a+o.m,0); R.totD=R.ops.filter(o=>!o.cred).reduce((a,o)=>a+o.m,0); R.fin=R.init+R.totC-R.totD; });
+const MOIS_RELEVE="octobre 2026";
+
+const PIECES_MAX = QUIZ.length + CHEQUES.length + VIR.length + RELEVES.length;
+
+const RECOMPENSES=[
+ {min:90, ic:"💎", nom:"Diamant",              g:"linear-gradient(135deg,#36d1dc,#7c4dff 55%,#ff4fa3)", msg:"Légende de la banque ! Tu pourrais diriger une agence 🏦"},
+ {min:75, ic:"🏆", nom:"Trophée d'or",         g:"linear-gradient(135deg,#ffd84d,#ffa41b 60%,#ff7a2f)",  msg:"Champion·ne ! Tes compétences valent de l'or ✨"},
+ {min:50, ic:"🥈", nom:"Médaille d'argent",    g:"linear-gradient(135deg,#8fb7ff,#6a7dff 55%,#a77bff)",  msg:"Bien joué ! Encore un petit effort et c'est l'or 💪"},
+ {min:25, ic:"🥉", nom:"Médaille de bronze",   g:"linear-gradient(135deg,#ffb37a,#ff7a52 55%,#e2557c)",  msg:"Bon début ! La correction en classe va t'aider à grimper 🚀"},
+ {min:0,  ic:"🌱", nom:"Graine de banquier·ère",g:"linear-gradient(135deg,#7be495,#22c55e 55%,#12a3a3)", msg:"Chaque pro a commencé un jour ! Écoute bien la correction, tu vas progresser 🌟"}
+];
+
+/* ---------- État & sauvegarde ---------- */
+let S = {nom:"",scores:{},pieces:0,debut:Date.now()};
+function save(){ try{ localStorage.setItem("missionBanqueLEGER4",JSON.stringify(S)); }catch(e){} }
+function load(){ try{ const t=localStorage.getItem("missionBanqueLEGER4"); if(t){ const o=JSON.parse(t); if(o&&o.nom) S=o; } }catch(e){} }
+const faites = () => MISSIONS.filter(m=>S.scores[m.id]!==undefined);
+
+function show(id){
+  ["ecranAccueil","ecranHub","ecranMission","ecranResultats","ecranProf"].forEach(x=>$("#"+x).classList.toggle("hidden",x!==id));
+  $("#dock").classList.toggle("hidden", !(id==="ecranHub"||id==="ecranMission"));
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+/* ---------- Effets ---------- */
+function confettis(n=100){
+  const col=["#7c4dff","#ff4fa3","#ffc928","#12c6b2","#3d8bff","#ff8a3d","#22c55e"];
+  for(let i=0;i<n;i++){
+    const d=document.createElement("div"); d.className="confetti";
+    d.style.left=Math.random()*100+"vw"; d.style.background=pick(col);
+    d.style.animationDuration=(1.8+Math.random()*2)+"s"; d.style.animationDelay=(Math.random()*.5)+"s";
+    document.body.appendChild(d); setTimeout(()=>d.remove(),4500);
+  }
+}
+function shake(el){ el.classList.remove("shake"); void el.offsetWidth; el.classList.add("shake"); son("erreur"); }
+function majDock(){ $("#dockNb").textContent=S.pieces; }
+function piece(depuis){
+  const s=depuis.getBoundingClientRect(), t=$("#dockTl").getBoundingClientRect();
+  const x0=s.left+s.width/2, y0=s.top+s.height/2;
+  const c=document.createElement("div"); c.className="flycoin"; c.textContent="🪙"; c.style.left=x0+"px"; c.style.top=y0+"px";
+  document.body.appendChild(c);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{ c.style.transform=`translate(${t.left+t.width/2-x0}px,${t.top+t.height/3-y0}px) scale(.45) rotate(540deg)`; c.style.opacity=".3"; }));
+  setTimeout(()=>{ c.remove(); S.pieces=Math.min(PIECES_MAX,S.pieces+1); save(); majDock(); const d=$("#dock"); d.classList.remove("boing"); void d.offsetWidth; d.classList.add("boing"); son("coin"); },760);
+}
+const mStyle = m => `style="--g1:${m.g1};--g2:${m.g2};--g3:${m.g3}"`;
+function progressBar(i,n){ return `<div class="progress">${Array.from({length:n},(_,k)=>`<span class="${k<i?'on':k===i?'ici':''}"></span>`).join("")}</div>`; }
+const ENCOURAGE=["Réponse enregistrée ! 🪙","Hop, une pièce de plus ! 🪙","C'est noté ! 🪙","Dans la tirelire ! 🪙","Ça roule ! 🪙"];
+
+/* ---------- Accueil ---------- */
+function renderApercu(){
+  $("#apercu").innerHTML = MISSIONS.map((m,k)=>`<div class="mcard statique" ${mStyle(m)}><span class="mnum">0${k+1}</span><div class="micon">${m.em}</div><h3>${m.titre}</h3><p>${m.desc}</p></div>`).join("");
+}
+$("#btnGo").onclick=()=>{
+  const n=$("#inNom").value.trim();
+  if(!n){ $("#errAccueil").classList.remove("hidden"); shake($("#btnGo")); return; }
+  if(S.nom!==n) S={nom:n,scores:{},pieces:0,debut:Date.now()};
+  save(); son("fanfare"); renderHub(); show("ecranHub");
+};
+$("#btnChanger").onclick=()=>{ if(confirm("Changer d'élève ? La progression actuelle sera effacée sur cet ordinateur.")){ S={nom:"",scores:{},pieces:0,debut:Date.now()}; save(); $("#inNom").value=""; show("ecranAccueil"); } };
+
+/* ---------- Hub ---------- */
+function renderHub(){
+  const f=faites().length; const nom=esc(S.nom);
+  $("#nbPieces").textContent=S.pieces; $("#maxPieces").textContent=PIECES_MAX; $("#nbMissions").textContent=f; majDock();
+  setTimeout(()=>$("#jaugeFill").style.width=(S.pieces/PIECES_MAX*100)+"%",100);
+  $("#hubBulle").innerHTML = f===0
+    ? `Bienvenue <b>${nom}</b> ! 🎉 Choisis une mission, dans l'ordre que tu veux. Chaque réponse = une pièce dans la tirelire ! Attention : <b>une seule tentative</b> par mission, prends ton temps 😉`
+    : f<MISSIONS.length ? `Super <b>${nom}</b> ! <b>${f}/${MISSIONS.length}</b> missions terminées. Ta tirelire se remplit… continue ! 💪`
+    : `🥳 Bravo <b>${nom}</b>, ta tirelire est pleine ! Demande le <b>code secret</b> à ton enseignante pour l'ouvrir.`;
+  $("#listeMissions").innerHTML = MISSIONS.map((m,k)=>{
+    const fait=S.scores[m.id]!==undefined;
+    return `<div class="mcard entre ${fait?'faite':''}" data-id="${m.id}" style="animation-delay:${k*.08}s;--g1:${m.g1};--g2:${m.g2};--g3:${m.g3}">
+      ${fait?'<div class="tampon">VALIDÉ ✓</div>':''}<span class="mnum">0${k+1}</span><div class="micon">${m.em}</div><h3>${m.titre}</h3><p>${m.desc}</p>
+      <span class="go">${fait?"✔ Terminée":"Jouer ▶"}</span></div>`;
+  }).join("");
+  document.querySelectorAll("#listeMissions .mcard:not(.faite)").forEach(c=>c.onclick=()=>{ son("clic"); ouvrir(c.dataset.id); });
+  $("#btnResultats").classList.toggle("pulse", f===MISSIONS.length);
+  dessinerTirelires();
+}
+
+function ouvrir(id){
+  const m=MISSIONS.find(x=>x.id===id);
+  $("#missionTitre").innerHTML=`<span class="micon" ${mStyle(m)}>${m.em}</span>${m.titre}`;
+  show("ecranMission");
+  ({quiz:mQuiz,detective:mDetective,virement:mVirement,solde:mSolde})[id]();
+}
+
+function finMission(id,pct){
+  if(S.scores[id]===undefined) S.scores[id]=pct;
+  save();
+  const reste=MISSIONS.length-faites().length;
+  $("#missionBody").innerHTML=`<div class="bravo entre">
+    <div class="tl danse">${TIRELIRE}</div>
+    <h2 class="arcenciel">Mission accomplie !</h2>
+    <p style="font-weight:800;font-size:18px">${reste>0?`Plus que <b>${reste}</b> mission${reste>1?"s":""} pour remplir la tirelire ! 🪙`:"Les 4 missions sont terminées ! Ta tirelire est pleine 🥳"}</p>
+    <p class="muted" style="font-weight:700">Tes résultats restent secrets jusqu'à l'ouverture de la tirelire 🤫</p>
+    <button class="btn rose gros" id="fRetour">${reste>0?"Mission suivante 🗺️":"Ouvrir ma tirelire 🎁"}</button></div>`;
+  $("#fRetour").onclick=()=>{ if(reste>0){ renderHub(); show("ecranHub"); } else ouvrirResultats(); };
+  confettis(); son("fanfare");
+}
+function suivantAvec(btn, fn){ $("#fb").innerHTML=`<div class="enregistre">${pick(ENCOURAGE)}</div>`; piece(btn); setTimeout(fn,900); }
+
+/* =========================================================
+   MISSION 1 : QUIZ (sans correction)
+   ========================================================= */
+function mQuiz(){
+  let i=0, pts=0; const box=$("#missionBody");
+  function q(){
+    if(i>=QUIZ.length) return finMission("quiz",Math.round(pts/QUIZ.length*100));
+    const Q=QUIZ[i];
+    box.innerHTML=`<div class="entre">${progressBar(i,QUIZ.length)}<div class="etape">Question ${i+1} / ${QUIZ.length}</div>
+      <p class="question">${Q.q}</p>
+      <div class="vf"><button class="btn v" data-v="1">👍 VRAI</button><button class="btn f" data-v="0">👎 FAUX</button></div><div id="fb" style="min-height:44px"></div></div>`;
+    box.querySelectorAll(".vf button").forEach(b=>b.onclick=()=>{
+      if((b.dataset.v==="1")===Q.r) pts++;
+      box.querySelectorAll(".vf button").forEach(x=>x.disabled=true);
+      b.classList.add("choisi"); b.disabled=false; b.style.pointerEvents="none";
+      suivantAvec(b,()=>{i++;q();});
+    });
+  }
+  q();
+}
+
+/* =========================================================
+   MISSION 2 : DÉTECTIVE DU CHÈQUE (sans correction)
+   ========================================================= */
+const SIGN_SVG=`<svg width="140" height="40" viewBox="0 0 140 40"><path d="M5 30 C 20 5, 30 35, 45 18 S 65 8, 70 25 S 95 35, 100 12 S 125 22, 135 15" fill="none" stroke="#14306b" stroke-width="2.4" stroke-linecap="round"/></svg>`;
+function htmlCheque(ch){
+  const z=(k,html)=>`<span class="zone" data-k="${k}">${html}</span>`;
+  const vide='<span class="vide">(vide)</span>';
+  return `<div class="docs">
+      <div class="ticket"><b>🧾 ${MAGASIN}</b><br>${VILLE_MAGASIN} — ${DATE_JOUR}<br>- - - - - - - - - - - - - -<br>TOTAL À PAYER<br><b style="font-size:21px">${eur(ch.ticket)}</b><br>Règlement : CHÈQUE</div>
+      <div class="idcard"><div class="photo">🧑</div><div><div style="font-size:11px;color:#5b6b85;font-weight:900;letter-spacing:.08em">CARTE D'IDENTITÉ</div><div style="font-size:12px;color:#5b6b85;margin-bottom:4px">présentée par le client</div>${z("identite",`<b>${esc(ch.idNom)}</b>`)}</div></div>
+    </div>
+    <div class="cheque">
+      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;align-items:center"><span class="banque">🏦 BANQUE DU LYCÉE PRO</span>${z("chiffres",`<span class="chiffres">${eurNb(ch.chiffres)} €</span>`)}</div>
+      <div class="ligne"><span class="lib">Payez contre ce chèque</span>${z("lettres",`<span class="manus" style="display:block;min-width:220px">${esc(montantLettres(ch.lettres))}</span>`)}</div>
+      <div class="ligne"><span class="lib">à l'ordre de</span>${z("ordre",`<span class="manus" style="display:block;min-width:200px">${ch.ordre?esc(ch.ordre):vide}</span>`)}</div>
+      <div class="bas">
+        <div class="titulaire">Titulaire : ${esc(ch.titulaire)}<br>12 rue des Lilas</div>
+        <div><span class="lib">À </span>${z("lieu",`<span class="manus" style="display:inline-block;min-width:90px">${ch.lieu?esc(ch.lieu):vide}</span>`)}
+             <span class="lib"> le </span>${z("date",`<span class="manus" style="display:inline-block;min-width:110px">${ch.date||vide}</span>`)}</div>
+        <div>${z("signature",`<div class="sign">${ch.signature?SIGN_SVG:vide}</div>`)}<div class="lib" style="text-align:center">Signature</div></div>
+      </div>
+      <div class="num">⑈${ch.num}⑈ 30004⑉ 01234⑆ 00041192</div>
+    </div>`;
+}
+function mDetective(){
+  const N=CHEQUES.length; let i=0, pts=0; const box=$("#missionBody");
+  function q(){
+    if(i>=N) return finMission("detective",Math.round(pts/(N*7)*100));
+    const ch=CHEQUES[i], err=erreursCheque(ch), etat={};
+    box.innerHTML=`<div class="entre interactif">${progressBar(i,N)}<div class="etape">Chèque ${i+1} / ${N}</div>
+      ${bulle(`Tu es en caisse chez <b>${MAGASIN}</b>. Clique sur chaque élément encadrable du chèque et de la carte d'identité : <b>1 clic = ✅ correct</b>, <b>2 clics = ❌ erreur</b>. 7 éléments à contrôler !`)}
+      ${htmlCheque(ch)}
+      <div class="legend">${CHAMPS.map(c=>`<span><b>${c.l}</b> : ${c.r}</span>`).join("")}</div>
+      <button class="btn turq" id="val">🔎 Valider mon contrôle</button><div id="fb" style="min-height:44px;margin-top:10px"></div></div>`;
+    let fini=false;
+    box.querySelectorAll(".zone").forEach(el=>el.onclick=()=>{
+      if(fini) return; son("clic");
+      const k=el.dataset.k; etat[k] = etat[k]==="ok"?"ko":etat[k]==="ko"?undefined:"ok";
+      el.classList.remove("ok","ko"); el.querySelector(".mark")?.remove();
+      if(etat[k]){ el.classList.add(etat[k]); const m=document.createElement("span"); m.className="mark"; m.textContent=etat[k]==="ok"?"✅":"❌"; el.appendChild(m); }
+    });
+    $("#val").onclick=()=>{
+      const manquants=CHAMPS.filter(c=>!etat[c.k]);
+      if(manquants.length){ shake($("#val")); $("#fb").innerHTML=`<div class="enregistre" style="background:#ffe9ec;border-color:#ffb3bf">Il reste ${manquants.length} élément(s) à contrôler : ${manquants.map(c=>c.l).join(", ")}</div>`; return; }
+      fini=true; $("#val").disabled=true;
+      CHAMPS.forEach(c=>{ if((!err.has(c.k))===(etat[c.k]==="ok")) pts++; });
+      suivantAvec($("#val"),()=>{i++;q();});
+    };
+  }
+  q();
+}
+
+/* =========================================================
+   MISSION 3 : VIREMENTS (sans correction)
+   ========================================================= */
+const normRef = s => s.toUpperCase().replace(/[^A-Z0-9]/g,"");
+function htmlFacture(V){
+  return `<div class="docs">
+      <div class="facture"><div class="entete"><b>📄 FACTURE ${V.fact}</b><span>${V.benef}</span></div>
+        ${V.objet}<br>Net à payer : <b style="font-size:19px">${eur(V.montant)}</b><br><br>
+        <small>Coordonnées bancaires de ${V.benef} :</small><br><span class="mono"><b>IBAN ${V.iban}</b></span><br>
+        <small class="muted">Merci d'indiquer le n° de facture en motif du virement.</small></div>
+      <div class="facture"><b>🏦 Comptes de ${ENTREPRISE}</b>
+        <table class="comptes">${COMPTES.map(c=>`<tr><td>${c.nom}</td><td class="num">${eur(V.soldes[c.id])}</td></tr>`).join("")}</table></div>
+    </div>`;
+}
+function mVirement(){
+  let i=0, pts=0; const box=$("#missionBody"); const N=VIR.length;
+  function q(){
+    if(i>=N) return finMission("virement",Math.round(pts/(N*5)*100));
+    const V=VIR[i];
+    box.innerHTML=`<div class="entre">${progressBar(i,N)}<div class="etape">Virement ${i+1} / ${N}</div>
+      ${bulle(`Tu es assistant·e de gestion chez <b>${ENTREPRISE}</b>. Paie la facture par virement. Choisis un compte <b>qui peut payer un fournisseur</b> et dont le solde est <b>suffisant</b>, et vérifie l'IBAN chiffre par chiffre ! 🔍`)}
+      ${htmlFacture(V)}
+      <div class="ordre"><h3>📝 Ordre de virement</h3>
+        <div class="row">
+          <div><label>1. Compte à débiter</label><select id="vC"><option value="">— choisir —</option>${COMPTES.map(c=>`<option value="${c.id}">${c.nom}</option>`).join("")}</select></div>
+          <div><label>2. Bénéficiaire</label><select id="vB"><option value="">— choisir —</option>${CARNET.map(b=>`<option>${esc(b)}</option>`).join("")}</select></div>
+        </div>
+        <label>3. IBAN du bénéficiaire</label><select id="vI" class="mono"><option value="">— choisir —</option>${V.options.map(x=>`<option>${x}</option>`).join("")}</select>
+        <div class="row">
+          <div><label>4. Montant (€)</label><input type="text" id="vM" placeholder="Ex : 1234,56" autocomplete="off"></div>
+          <div><label>5. Motif</label><input type="text" id="vO" placeholder="Ex : Facture n° …" autocomplete="off"></div>
+        </div>
+        <div style="margin-top:16px"><button class="btn turq" id="val">📤 Envoyer le virement</button></div>
+      </div><div id="fb" style="min-height:44px;margin-top:10px"></div></div>`;
+    $("#val").onclick=()=>{
+      const c=$("#vC").value,b=$("#vB").value,ib=$("#vI").value,m=$("#vM").value,o=$("#vO").value;
+      if(!c||!b||!ib||!m.trim()||!o.trim()){ shake($("#val")); $("#fb").innerHTML=`<div class="enregistre" style="background:#ffe9ec;border-color:#ffb3bf">Remplis les 5 champs de l'ordre de virement 😉</div>`; return; }
+      const cpt=COMPTES.find(x=>x.id===c);
+      [cpt.type==="courant"&&V.soldes[c]>=V.montant, b===V.benef, ib===V.iban, parseEur(m)===V.montant, normRef(o).includes(normRef(V.fact))].forEach(ok=>{ if(ok) pts++; });
+      ["vC","vB","vI","vM","vO"].forEach(id=>$("#"+id).disabled=true); $("#val").disabled=true;
+      suivantAvec($("#val"),()=>{i++;q();});
+    };
+  }
+  q();
+}
+
+/* =========================================================
+   MISSION 4 : LE COMPTE EST BON (sans correction)
+   ========================================================= */
+function htmlReleve(R){
+  const sol=c=>c>=0?`<span class="cre">${eur(c)} (créditeur)</span>`:`<span class="deb">${eur(Math.abs(c))} (débiteur)</span>`;
+  return `<table class="releve"><tr><th>Date</th><th>Opération</th><th style="text-align:right">Débit</th><th style="text-align:right">Crédit</th></tr>
+      <tr><td>01</td><td><b>Solde initial</b></td><td colspan="2" class="n">${sol(R.init)}</td></tr>
+      ${R.ops.map(o=>`<tr><td>${String(o.j).padStart(2,"0")}</td><td>${o.lib}</td><td class="n deb">${o.cred?"":eurNb(o.m)}</td><td class="n cre">${o.cred?eurNb(o.m):""}</td></tr>`).join("")}
+    </table><p class="muted" style="font-size:13px;font-weight:700">Relevé d'${MOIS_RELEVE} – compte fictif.</p>`;
+}
+function mSolde(){
+  const N=RELEVES.length; let i=0, pts=0; const box=$("#missionBody");
+  function q(){
+    if(i>=N) return finMission("solde",Math.round(pts/(N*2)*100));
+    const R=RELEVES[i];
+    box.innerHTML=`<div class="entre">${progressBar(i,N)}<div class="etape">Relevé ${i+1} / ${N}</div>
+      ${bulle(`Calcule le <b>solde final</b> du compte. Rappel : <b>solde final = solde initial + crédits − débits</b>. Calculatrice autorisée ! 📱`)}
+      ${htmlReleve(R)}
+      <div class="row">
+        <div><label>1. Solde final (€) — mets un « - » s'il est négatif</label><input type="text" id="sM" placeholder="Ex : 1250,40 ou -85,10" autocomplete="off"></div>
+        <div><label>2. Situation du compte</label><select id="sS"><option value="">— choisir —</option><option value="c">Créditeur (positif)</option><option value="d">Débiteur / à découvert (négatif)</option></select></div>
+      </div>
+      <div style="margin-top:16px"><button class="btn rose" id="val">✔ Valider</button></div><div id="fb" style="min-height:44px;margin-top:10px"></div></div>`;
+    $("#val").onclick=()=>{
+      const m=$("#sM").value, s=$("#sS").value;
+      if(!m.trim()||!s){ shake($("#val")); $("#fb").innerHTML=`<div class="enregistre" style="background:#ffe9ec;border-color:#ffb3bf">Réponds aux 2 questions 😉</div>`; return; }
+      if(parseEur(m)===R.fin) pts++; if((s==="c")===(R.fin>=0)) pts++;
+      $("#sM").disabled=$("#sS").disabled=$("#val").disabled=true;
+      suivantAvec($("#val"),()=>{i++;q();});
+    };
+  }
+  q();
+}
+
+/* =========================================================
+   RÉSULTATS & RÉCOMPENSE (déverrouillés par le code élève)
+   ========================================================= */
+function hash(str){ let a=5381, b=52711; for(const ch of SEL+"|"+str){ const c=ch.codePointAt(0); a=((a*33)^c)>>>0; b=((b*31)+c)>>>0; } return ((a^b)>>>0).toString(36).toUpperCase().padStart(7,"0").slice(-7); }
+const b64e = s => btoa(unescape(encodeURIComponent(s))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+const b64d = s => { s=s.replace(/-/g,"+").replace(/_/g,"/"); while(s.length%4) s+="="; return decodeURIComponent(escape(atob(s))); };
+function genererCode(){
+  const sc=MISSIONS.map(m=>S.scores[m.id]===undefined?-1:S.scores[m.id]).join(",");
+  const minutes=Math.max(1,Math.round((Date.now()-S.debut)/60000));
+  const payload=["v4",S.nom,sc,new Date().toISOString().slice(0,16),minutes].join("|");
+  return "MB."+b64e(payload)+"."+hash(payload);
+}
+function lireCode(code){
+  code=code.trim(); const p=code.split(".");
+  if(p.length!==3||p[0]!=="MB") return {ok:false,raw:code,err:"Format invalide"};
+  let payload; try{ payload=b64d(p[1]); }catch(e){ return {ok:false,raw:code,err:"Code illisible"}; }
+  const f=payload.split("|"); if(f.length<5||f[0]!=="v4") return {ok:false,raw:code,err:"Code incomplet ou d'une ancienne version"};
+  return {ok:true,auth:hash(payload)===p[2],nom:f[1],scores:f[2].split(",").map(Number),date:f[3],minutes:Number(f[4])};
+}
+const etoiles = p => p>=90?"⭐⭐⭐":p>=60?"⭐⭐":p>=30?"⭐":"☆";
+const moyenneS = () => Math.round(MISSIONS.reduce((a,m)=>a+(S.scores[m.id]||0),0)/MISSIONS.length);
+
+function ouvrirResultats(){
+  const f=faites().length;
+  if(f===0){ alert("Fais au moins une mission avant d'ouvrir ta tirelire 😉"); return; }
+  if(f<MISSIONS.length && !confirm(`Tu n'as terminé que ${f} mission(s) sur ${MISSIONS.length}. Les missions non faites compteront 0. Continuer ?`)) return;
+  $("#resVerrou").classList.remove("hidden"); $("#resAffiche").classList.add("hidden");
+  $("#inCodeEleve").value=""; $("#errCodeEleve").classList.add("hidden");
+  const t=$("#tlCoffre"); t.classList.remove("secoue","explose"); t.innerHTML=TIRELIRE;
+  show("ecranResultats"); setTimeout(()=>$("#inCodeEleve").focus(),300);
+}
+$("#btnResultats").onclick=ouvrirResultats;
+$("#btnResRetour").onclick=()=>{ renderHub(); show("ecranHub"); };
+function tenterOuverture(){
+  if($("#inCodeEleve").value.trim().toUpperCase()!==CODE_ELEVE.toUpperCase()){ $("#errCodeEleve").classList.remove("hidden"); shake($("#inCodeEleve")); return; }
+  $("#btnOuvrir").disabled=true;
+  const t=$("#tlCoffre"); t.classList.add("secoue"); son("roulement");
+  setTimeout(()=>{
+    const r=t.getBoundingClientRect(); const cx=r.left+r.width/2, cy=r.top+r.height/2;
+    for(let k=0;k<26;k++){
+      const e=document.createElement("div"); e.className="eclat"; e.textContent=pick(["🪙","🪙","💶","✨","⭐"]);
+      e.style.left=cx+"px"; e.style.top=cy+"px"; document.body.appendChild(e);
+      const a=Math.random()*Math.PI*2, d=140+Math.random()*260;
+      requestAnimationFrame(()=>requestAnimationFrame(()=>{ e.style.transform=`translate(${Math.cos(a)*d}px,${Math.sin(a)*d}px) rotate(${Math.random()*720}deg)`; e.style.opacity="0"; }));
+      setTimeout(()=>e.remove(),1200);
+    }
+    t.classList.remove("secoue"); t.classList.add("explose"); son("coin");
+  },1250);
+  setTimeout(()=>{ afficherResultats(); $("#btnOuvrir").disabled=false; },1850);
+}
+$("#btnOuvrir").onclick=tenterOuverture; $("#inCodeEleve").onkeydown=e=>{ if(e.key==="Enter") tenterOuverture(); };
+
+function afficherResultats(){
+  const moy=moyenneS(); const R=RECOMPENSES.find(x=>moy>=x.min);
+  $("#resVerrou").classList.add("hidden"); $("#resAffiche").classList.remove("hidden");
+  const c=$("#carteRecompense"); c.style.background=R.g;
+  c.innerHTML=`<div class="medaille">${R.ic}</div><div style="font-weight:900;letter-spacing:.16em;font-size:13px;opacity:.9">TA RÉCOMPENSE</div>
+    <h2>${R.nom}</h2><div class="moy">${moy} %</div><p>${esc(S.nom)}</p><p>${R.msg}</p>`;
+  c.style.animation="none"; void c.offsetWidth; c.style.animation="";
+  $("#resScores").innerHTML=MISSIONS.map(m=>{ const s=S.scores[m.id]; return `<div class="score" ${mStyle(m)}>${m.em} ${m.titre}<b>${s===undefined?"—":s+" %"}</b>${s===undefined?"non faite":etoiles(s)}</div>`; }).join("");
+  $("#resBadges").innerHTML=MISSIONS.map((m,k)=>{ const ok=(S.scores[m.id]||0)>=80;
+    return `<div class="badge ${ok?'gagne':'verrou'}" style="animation-delay:${.4+k*.2}s"><span class="ic">${ok?m.badge.ic:"🔒"}</span>${m.badge.nom}<br><small class="muted">${ok?"Débloqué !":"80 % requis"}</small></div>`; }).join("")
+    + `<div class="badge ${faites().length===MISSIONS.length?'gagne':'verrou'}" style="animation-delay:1.2s"><span class="ic">${faites().length===MISSIONS.length?"🐷":"🔒"}</span>Tirelire pleine<br><small class="muted">4 missions terminées</small></div>`;
+  $("#codeResultat").textContent=genererCode(); $("#copieOk").classList.add("hidden");
+  window.scrollTo({top:0,behavior:"smooth"}); son("fanfare"); confettis(moy>=50?180:90);
+}
+$("#btnCopier").onclick=async()=>{
+  const t=$("#codeResultat").textContent;
+  try{ await navigator.clipboard.writeText(t); }
+  catch(e){ const r=document.createRange(); r.selectNodeContents($("#codeResultat")); const s=getSelection(); s.removeAllRanges(); s.addRange(r); try{document.execCommand("copy");}catch(_){} }
+  $("#copieOk").classList.remove("hidden"); son("coin");
+};
+$("#btnImprimer").onclick=()=>window.print();
+$("#btnRetourHub").onclick=()=>{ renderHub(); show("ecranHub"); };
+
+/* =========================================================
+   ESPACE ENSEIGNANT
+   ========================================================= */
+let derniersResultats=[];
+$("#btnProf").onclick=()=>{ $("#profLogin").classList.remove("hidden"); $("#profZone").classList.add("hidden"); $("#inProf").value=""; $("#errProf").classList.add("hidden"); show("ecranProf"); setTimeout(()=>$("#inProf").focus(),200); };
+$("#btnProfRetour").onclick=()=>{ if(S.nom){ renderHub(); show("ecranHub"); } else show("ecranAccueil"); };
+function entrerProf(){
+  if($("#inProf").value.trim()===CODE_ENSEIGNANT){ $("#profLogin").classList.add("hidden"); $("#profZone").classList.remove("hidden"); renderCorrige(); corrIdx=0; renderCorr(); }
+  else { $("#errProf").classList.remove("hidden"); shake($("#inProf")); }
+}
+$("#btnProfOk").onclick=entrerProf; $("#inProf").onkeydown=e=>{ if(e.key==="Enter") entrerProf(); };
+$("#btnProfQuit").onclick=()=>{ $("#codesProf").value=""; $("#resProf").innerHTML=""; if(document.fullscreenElement) document.exitFullscreen(); if(S.nom){ renderHub(); show("ecranHub"); } else show("ecranAccueil"); };
+$("#btnPleinEcran").onclick=()=>{ if(!document.fullscreenElement) document.documentElement.requestFullscreen?.(); else document.exitFullscreen?.(); };
+document.querySelectorAll(".onglet").forEach(o=>o.onclick=()=>{
+  document.querySelectorAll(".onglet").forEach(x=>x.classList.toggle("actif",x===o));
+  $("#oCorr").classList.toggle("hidden",o.dataset.o!=="corr"); $("#oRes").classList.toggle("hidden",o.dataset.o!=="res"); $("#oCle").classList.toggle("hidden",o.dataset.o!=="cle");
+});
+
+/* ---- Correction collective (projetable) ---- */
+const CORR=[...QUIZ.map((x,k)=>({m:"quiz",k,x})),...CHEQUES.map((x,k)=>({m:"detective",k,x})),...VIR.map((x,k)=>({m:"virement",k,x})),...RELEVES.map((x,k)=>({m:"solde",k,x}))];
+let corrIdx=0;
+function renderCorr(){
+  const it=CORR[corrIdx], M=MISSIONS.find(m=>m.id===it.m);
+  const nb=CORR.filter(c=>c.m===it.m).length;
+  let corps="";
+  if(it.m==="quiz") corps=`<p class="question">${it.x.q}</p>`;
+  if(it.m==="detective") corps=htmlCheque(it.x);
+  if(it.m==="virement") corps=htmlFacture(it.x);
+  if(it.m==="solde") corps=htmlReleve(it.x);
+  $("#oCorr").innerHTML=`<div class="onglets">${MISSIONS.map(m=>`<button class="onglet ${m.id===it.m?'actif':''}" data-m="${m.id}">${m.em} ${m.titre}</button>`).join("")}</div>
+    <div class="projo entre">
+      <div class="mhead"><h2><span class="micon" ${mStyle(M)}>${M.em}</span>${M.titre} — ${it.m==="quiz"?"Question":it.m==="detective"?"Chèque":it.m==="virement"?"Virement":"Relevé"} ${it.k+1} / ${nb}</h2></div>
+      ${corps}<div id="corrRep" style="margin-top:14px"></div>
+      <div class="nav-corr">
+        <button class="btn blanc" id="cPrev" ${corrIdx===0?"disabled":""}>◀ Précédent</button>
+        <button class="btn or gros" id="cRev">👀 Révéler la correction</button>
+        <button class="btn blanc" id="cNext" ${corrIdx===CORR.length-1?"disabled":""}>Suivant ▶</button>
+      </div></div>`;
+  $("#oCorr").querySelectorAll(".onglet[data-m]").forEach(b=>b.onclick=()=>{ corrIdx=CORR.findIndex(c=>c.m===b.dataset.m); renderCorr(); });
+  $("#cPrev").onclick=()=>{ corrIdx--; renderCorr(); };
+  $("#cNext").onclick=()=>{ corrIdx++; renderCorr(); };
+  $("#cRev").onclick=()=>{ $("#cRev").disabled=true; revelerCorr(it); son("fanfare"); };
+}
+function revelerCorr(it){
+  const z=$("#corrRep");
+  if(it.m==="quiz"){
+    z.innerHTML=`<span class="reponse ${it.x.r?'vrai':'faux'}">${it.x.r?"👍 VRAI":"👎 FAUX"}</span><div class="explic">${it.x.e}</div>`;
+  }
+  if(it.m==="detective"){
+    const err=erreursCheque(it.x);
+    document.querySelectorAll("#oCorr .zone").forEach(el=>{ const bad=err.has(el.dataset.k); el.classList.add(bad?"ko":"ok"); const m=document.createElement("span"); m.className="mark"; m.textContent=bad?"❌":"✅"; el.appendChild(m); });
+    const expl={chiffres:`le montant en chiffres (${eurNb(it.x.chiffres)} €) ne correspond pas au ticket (${eur(it.x.ticket)})`,
+      lettres:`le montant en lettres correspond à ${eur(it.x.lettres)}, pas au ticket (${eur(it.x.ticket)}) — et en cas de différence, c'est le montant en lettres qui compte !`,
+      ordre:`le bénéficiaire doit être exactement « ${MAGASIN} »`, lieu:"le lieu n'est pas indiqué",
+      date:`la date (${it.x.date||"vide"}) n'est pas celle du jour de l'achat (${DATE_JOUR})${it.x.date&&it.x.date>DATE_JOUR?" : chèque postdaté":""}`,
+      signature:"le chèque n'est pas signé", identite:`la pièce d'identité (${it.x.idNom}) ne correspond pas au titulaire (${it.x.titulaire})`};
+    z.innerHTML=`<div class="explic">${err.size?`<b>${err.size} erreur${err.size>1?"s":""} :</b><ul>${[...err].map(k=>`<li>❌ <b>${CHAMPS.find(c=>c.k===k).l}</b> : ${expl[k]}</li>`).join("")}</ul><b>Décision : ❌ chèque refusé</b> (le client doit en refaire un).`:"<b>✅ Aucune erreur : ce chèque peut être accepté !</b>"}</div>`;
+  }
+  if(it.m==="virement"){
+    const V=it.x, b=bonCompte(V);
+    z.innerHTML=`<div class="explic"><b>📝 Ordre de virement correct :</b><ul>
+      <li><b>Compte à débiter :</b> ${b.nom} (${eur(V.soldes[b.id])} ≥ ${eur(V.montant)}). ${COMPTES.filter(c=>c.id!==b.id).map(c=>c.type==="epargne"?`Le ${c.nom} ne sert pas à payer un fournisseur.`:`Le ${c.nom} est insuffisant (${eur(V.soldes[c.id])}).`).join(" ")}</li>
+      <li><b>Bénéficiaire :</b> ${V.benef}</li>
+      <li><b>IBAN :</b> <span class="mono">${V.iban}</span> (les deux autres IBAN proposés ont des chiffres inversés : piège !)</li>
+      <li><b>Montant :</b> ${eur(V.montant)}</li>
+      <li><b>Motif :</b> doit contenir le n° de facture ${V.fact}</li></ul></div>`;
+  }
+  if(it.m==="solde"){
+    const R=it.x;
+    z.innerHTML=`<div class="explic">Total des crédits : <b>${eur(R.totC)}</b> · Total des débits : <b>${eur(R.totD)}</b><br>
+      Calcul : ${eurNb(R.init)} + ${eurNb(R.totC)} − ${eurNb(R.totD)} = <b style="font-size:24px">${eurNb(R.fin)} €</b><br>
+      Situation : <b>${R.fin>=0?"✅ solde créditeur":"⚠️ solde débiteur (compte à découvert)"}</b></div>`;
+  }
+}
+
+/* ---- Résultats de la classe ---- */
+const moyenneR = r => Math.round(r.scores.reduce((a,v)=>a+Math.max(0,v),0)/MISSIONS.length);
+$("#btnVerif").onclick=()=>{
+  const lignes=$("#codesProf").value.split(/\n+/).map(x=>x.trim()).filter(Boolean);
+  derniersResultats=lignes.map(lireCode);
+  if(!lignes.length){ $("#resProf").innerHTML="<p class='muted'>Aucun code collé.</p>"; return; }
+  const fmt=v=>v<0?"<span class='muted'>—</span>":v+" %";
+  $("#resProf").innerHTML=`<table class="prof"><tr><th>Élève</th>${MISSIONS.map(m=>`<th title="${m.titre}">${m.em}</th>`).join("")}<th>Moy.</th><th>Récompense</th><th>Date (UTC)</th><th>Durée</th><th>Authenticité</th></tr>
+   ${derniersResultats.map(r=>{
+     if(!r.ok) return `<tr><td colspan="${MISSIONS.length+6}" class="kov">❌ ${r.err} : <span class="mono" style="font-size:12px">${esc(r.raw.slice(0,40))}…</span></td></tr>`;
+     const moy=moyenneR(r), R=RECOMPENSES.find(x=>moy>=x.min);
+     return `<tr><td><b>${esc(r.nom)}</b></td>${r.scores.map(v=>`<td>${fmt(v)}</td>`).join("")}<td><b>${moy} %</b></td><td>${R.ic} ${R.nom}</td><td>${esc(r.date.replace("T"," "))}</td><td>${r.minutes} min</td>
+       <td class="${r.auth?'okv':'kov'}">${r.auth?"✅ Authentique":"⚠️ Code modifié"}</td></tr>`;
+   }).join("")}</table>
+   <p class="muted" style="font-size:13px">Légende : ${MISSIONS.map(m=>m.em+" "+m.titre).join(" · ")} · « — » = mission non faite (compte 0).</p>`;
+};
+$("#btnCsv").onclick=()=>{
+  if(!derniersResultats.length){ alert("Vérifiez d'abord des codes."); return; }
+  const head=["Eleve",...MISSIONS.map(m=>m.titre),"Moyenne","Recompense","Date (UTC)","Duree (min)","Authentique"];
+  const rows=derniersResultats.filter(r=>r.ok).map(r=>{ const moy=moyenneR(r); return [r.nom,...r.scores.map(v=>v<0?"":v),moy,RECOMPENSES.find(x=>moy>=x.min).nom,r.date.replace("T"," "),r.minutes,r.auth?"oui":"NON"]; });
+  const csv="﻿"+[head,...rows].map(l=>l.map(x=>`"${String(x).replace(/"/g,'""')}"`).join(";")).join("\r\n");
+  const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));
+  a.download="resultats_mission_banque.csv"; document.body.appendChild(a); a.click(); a.remove();
+};
+
+/* ---- Corrigé complet & codes ---- */
+function renderCorrige(){
+  $("#corrige").innerHTML=`
+   <h4>🗝️ Codes</h4><p>Code enseignant : <b class="mono">${CODE_ENSEIGNANT}</b> · Code secret élèves (ouvre les résultats) : <b class="mono">${CODE_ELEVE}</b><br>
+   <small class="muted">Modifiables en haut du script (constantes CODE_ENSEIGNANT et CODE_ELEVE).</small></p>
+   <h4>🏅 Récompenses (moyenne des 4 missions)</h4><p>${RECOMPENSES.map(r=>`${r.ic} ${r.nom} : ${r.min===0?"moins de 25":"≥ "+r.min} %`).join(" · ")}<br>Badges : 80 % ou plus dans une mission ; « Tirelire pleine » si les 4 missions sont faites.</p>
+   <h4>🧠 Quiz</h4><ol>${QUIZ.map(q=>`<li>${q.q} → <b>${q.r?"VRAI":"FAUX"}</b></li>`).join("")}</ol>
+   <h4>🕵️ Détective du chèque</h4><ol>${CHEQUES.map(c=>{const e=erreursCheque(c);return `<li>${c.titulaire} (${eur(c.ticket)}) : ${e.size?[...e].map(k=>CHAMPS.find(x=>x.k===k).l).join(", "):"aucune erreur → accepté"}</li>`;}).join("")}</ol>
+   <h4>💸 Virements</h4><ol>${VIR.map(v=>`<li>${v.fact} : ${bonCompte(v).nom} · ${v.benef} · <span class="mono">${v.iban}</span> · ${eur(v.montant)}</li>`).join("")}</ol>
+   <h4>🧮 Le compte est bon</h4><ol>${RELEVES.map(r=>`<li>${eurNb(r.fin)} € — ${r.fin>=0?"créditeur":"débiteur"}</li>`).join("")}</ol>`;
+}
+
+/* ---------- Démarrage ---------- */
+dessinerTirelires(); majBoutonSon(); renderApercu(); load(); majDock();
+if(S.nom){ $("#inNom").value=S.nom; }
+</script>
+</body>
+</html>
